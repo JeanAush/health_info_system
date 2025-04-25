@@ -1,39 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-const ClientList = ({ searchQuery }) => {
-  const [clients, setClients] = useState([
-    { id: 1, name: "Jane Doe", program: "HIV" },
-    { id: 2, name: "John Smith", program: "Malaria" },
-    { id: 3, name: "Alice Johnson", program: "TB" },
-  ]);
-
-  const [filteredClients, setFilteredClients] = useState(clients);
-
-  useEffect(() => {
-    if (searchQuery) {
-      setFilteredClients(
-        clients.filter((client) =>
-          client.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredClients(clients);
-    }
-  }, [searchQuery, clients]);
-
+const ClientList = ({ clients }) => {
   return (
     <div>
-      <h2>Client List</h2>
-      <ul>
-        {filteredClients.length > 0 ? (
-          filteredClients.map((client) => (
-            <li key={client.id}>
-              {client.name} - {client.program}
-            </li>
-          ))
-        ) : (
-          <li>No clients found</li>
-        )}
+      <h2 style={{ fontSize: "1.8rem", marginBottom: "20px", color: "#333" }}>
+        Client List
+      </h2>
+      <ul style={{ listStyleType: "none", padding: "0" }}>
+        {clients.map((client) => (
+          <li
+            key={client.id}
+            style={{
+              backgroundColor: "#ffffff",
+              padding: "15px",
+              marginBottom: "15px",
+              borderRadius: "8px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+              {client.name} - {client.gender}
+            </span>
+            <button
+              style={{
+                backgroundColor: "#007bff",
+                color: "#fff",
+                border: "none",
+                padding: "8px 15px",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+              onClick={() => alert("Edit Client")}
+            >
+              Edit
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   );

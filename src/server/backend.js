@@ -8,6 +8,7 @@ const PORT = 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 
 pool.query("SELECT NOW()", (err, res) => {
   if (err) {
