@@ -1,9 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Disease from "../../assets/disease2.webp";
+import { getPrograms, enrollClient } from "../../services/api";
 
 const Programs = () => {
-  const [programs, setPrograms] = useState(["TB", "Malaria", "HIV"]); // List of available programs
+  const [programs, setPrograms] = useState([]); // Initially empty, populated by the backend data
   const [newProgram, setNewProgram] = useState(""); // State to handle the input field
+
+  // Fetch programs from the backend
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      const fetchedPrograms = await getPrograms();
+      setPrograms(fetchedPrograms);
+    };
+    fetchPrograms();
+  }, []);
+
+  // Handle enrolling a client in a program
+  const handleEnroll = async (clientId, programId) => {
+    const enrollment = await enrollClient(clientId, programId);
+    if (enrollment) {
+      console.log("Successfully enrolled", enrollment);
+    } else {
+      console.error("Enrollment failed");
+    }
+  };
 
   const handleInputChange = (e) => {
     setNewProgram(e.target.value); // Update input field state
@@ -38,7 +58,7 @@ const Programs = () => {
         Health Programs
       </h2>
 
-      {/* Input and Button for Adding New Program */}
+      {/* Program Input Section */}
       <div
         className="add-program"
         style={{
@@ -105,7 +125,21 @@ const Programs = () => {
               textAlign: "center",
             }}
           >
-            {program}
+            <span>{program}</span>
+            <button
+              onClick={() => handleEnroll(1, program)} // Assume client ID is 1 for now
+              style={{
+                backgroundColor: "#28a745",
+                color: "#fff",
+                border: "none",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                cursor: "pointer",
+                marginLeft: "10px",
+              }}
+            >
+              Enroll
+            </button>
           </li>
         ))}
       </ul>

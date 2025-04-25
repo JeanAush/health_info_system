@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./src/client  
+      dockerfile: Dockerfile 
+    image: nginx:latest
+    ports:
+      - "80:80"  # Exposing the React app on port 80
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: src/server/Dockerfile 
+    ports:
+      - "5000:5000"  # Exposing the backend API on port 5000
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=production
+  
+  nginx:
+    image: nginx:latest  # Using the latest official nginx image
+    ports:
+      - "8080:80"  # Expose port 8080 for nginx
+    volumes:
+      - ./src/client/build:/usr/share/nginx/html  # Mount the frontend build directory
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

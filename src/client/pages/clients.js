@@ -1,14 +1,26 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import ClientForm from "../components/clients/clientForm";
 import ClientList from "../components/clients/clientList";
-import Patient from "../../assets/patient.webp"; // 
+import Patient from "../../assets/patient.webp"; 
+import { getClients, addClient } from "../../services/api";
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
 
-  const handleRegister = (newClient) => {
-    const id = Date.now();
-    setClients([...clients, { ...newClient, id }]);
+  // Fetch clients from the backend
+  useEffect(() => {
+    const fetchClients = async () => {
+      const fetchedClients = await getClients();
+      setClients(fetchedClients);
+    };
+    fetchClients();
+  }, []);
+
+  const handleRegister = async (clientData) => {
+    const newClient = await addClient(clientData);
+    if (newClient) {
+      setClients((prevClients) => [...prevClients, newClient]);
+    }
   };
 
   return (
@@ -17,7 +29,7 @@ const Clients = () => {
       style={{
         fontFamily: "Roboto, sans-serif",
         padding: "20px",
-        backgroundColor: "#f0f0f0", 
+        backgroundColor: "#f0f0f0",
       }}
     >
       <h1
