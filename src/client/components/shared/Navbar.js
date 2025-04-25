@@ -1,43 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ onSearch }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    onSearch(e.target.value); // Call the parent function to update the search state
+  };
+
   return (
-    <nav
-      style={{
-        backgroundColor: "#0d3b66",
-        padding: "10px 20px",
-        marginBottom: "30px",
-      }}
-    >
+    <nav style={{ backgroundColor: "#0d3b66", padding: "15px 20px" }}>
       <ul
         style={{
           listStyle: "none",
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "center",
           margin: 0,
           padding: 0,
         }}
       >
-        <li>
+        <li style={{ marginRight: "30px" }}>
           <Link
             to="/"
             style={{
-              color: "white",
+              color: "Grey",
               textDecoration: "none",
               fontSize: "1.2rem",
+              fontWeight: "bold",
+              padding: "10px 15px",
+              borderRadius: "5px",
             }}
           >
             Home
           </Link>
         </li>
-        <li>
+        <li style={{ marginRight: "30px" }}>
           <Link
             to="/clients"
             style={{
-              color: "white",
+              color: "Grey",
               textDecoration: "none",
               fontSize: "1.2rem",
+              fontWeight: "bold",
+              padding: "10px 15px",
+              borderRadius: "5px",
             }}
           >
             Manage Clients
@@ -47,25 +54,32 @@ const Navbar = () => {
           <Link
             to="/programs"
             style={{
-              color: "white",
+              color: "Grey",
               textDecoration: "none",
               fontSize: "1.2rem",
+              fontWeight: "bold",
+              padding: "10px 15px",
+              borderRadius: "5px",
             }}
           >
             View Programs
           </Link>
         </li>
         <li>
-          <Link
-            to="/about"
+          <input
+            type="text"
+            placeholder="Search Clients"
+            value={searchQuery}
+            onChange={handleSearchChange}
             style={{
-              color: "white",
-              textDecoration: "none",
-              fontSize: "1.2rem",
+              padding: "8px 12px",
+              marginLeft: "20px",
+              borderRadius: "5px",
+              border: "none",
+              outline: "none",
+              width: "200px",
             }}
-          >
-            About
-          </Link>
+          />
         </li>
       </ul>
     </nav>

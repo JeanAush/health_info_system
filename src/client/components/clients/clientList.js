@@ -1,22 +1,41 @@
-// src/client/components/ClientList.jsx
-import React from "react";
-import { Link } from "react-router-dom";
-import { useClients } from "../../context/clientContext";
+import React, { useState, useEffect } from "react";
 
-const ClientList = () => {
-  const { clients } = useClients();
+const ClientList = ({ searchQuery }) => {
+  const [clients, setClients] = useState([
+    { id: 1, name: "Jane Doe", program: "HIV" },
+    { id: 2, name: "John Smith", program: "Malaria" },
+    { id: 3, name: "Alice Johnson", program: "TB" },
+  ]);
 
-  if (!clients.length) return <p>No clients registered yet.</p>;
+  const [filteredClients, setFilteredClients] = useState(clients);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setFilteredClients(
+        clients.filter((client) =>
+          client.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredClients(clients);
+    }
+  }, [searchQuery, clients]);
 
   return (
-    <ul>
-      {clients.map((client) => (
-        <li key={client.id}>
-          <strong>{client.name}</strong> – {client.gender}, {client.age} yrs
-          <Link to={`/clients/${client.id}`}> View Profile</Link>
-        </li>
-      ))}
-    </ul>
+    <div>
+      <h2>Client List</h2>
+      <ul>
+        {filteredClients.length > 0 ? (
+          filteredClients.map((client) => (
+            <li key={client.id}>
+              {client.name} - {client.program}
+            </li>
+          ))
+        ) : (
+          <li>No clients found</li>
+        )}
+      </ul>
+    </div>
   );
 };
 
